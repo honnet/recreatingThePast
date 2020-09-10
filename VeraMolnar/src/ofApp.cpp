@@ -19,15 +19,19 @@ void ofApp::draw(){
         for (int i = step/3; i < w-2*step/3; i += step/2){
 
             float thicknessPyramid = (i < w / 2)? i : w - i ;
-
             float offset = 20.0 * thicknessPyramid / float(w);
-            ofSetLineWidth(offset + ofRandom(0.2, 1.0));
+            float thickness = offset + ofRandom(0.2, 1.0);
+            ofSetLineWidth(thickness);
 
             int x = cos(angleOffset + ofRandom(angleRange)) * step;
             int y = sin(angleOffset + ofRandom(angleRange)) * step;
 
-            ofDrawLine(i,     j,      // starting point
-                       i + x, j - y); // ending point
+            ofDrawLine(  i,     j,        // starting point
+                         i + x, j - y  ); // ending point
+
+            // draw circles to make round cap at lines ends:
+            ofDrawCircle(i,     j,     thickness/2);
+            ofDrawCircle(i + x, j - y, thickness/2);
         }
     }
 }

@@ -2,32 +2,37 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	sprites.load("./sprites.png"); // see in ./bin/data
 	photo.load("./photo.png"); // see in ./bin/data
+//    photo.cropFrom(sprites, h*5,0, h,h);
+    photo.resize(100, 100);
+
+	sprites.load("./sprites.png"); // see in ./bin/data
+    sprites.resize(diameter*sprite_num, diameter);
+	int h = sprites.getHeight();
+    for (int i = 0; i < sprite_num; i++) {
+        sprite[i].cropFrom(sprites, h*i,0, h,h);
+    }
+
 	ofBackground(0);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    photo.resize(100, 100);
+    static ofImage crop;
+    int offset = ofMap(mouseX, 0, ofGetWidth(), 0, sprite_num);
+
 	int w = photo.getWidth();
 	int h = photo.getHeight();
-	float diameter = 10;
 	for(int y = 0; y < h; y++) {
 		for(int x = 0; x < w; x++) {
+
 			ofColor cur = photo.getColor(x, y);
-			float size = cur.getBrightness() / 255;
-			ofDrawCircle(x * diameter,
-                         y * diameter,
-                         1 + size * diameter / 2);
+			int id = (sprite_num - 1) * (1 - cur.getBrightness() / 255.0);
+            id = (id + offset) % sprite_num;
+
+            sprite[id].draw(x*diameter, y*diameter);
 		}
 	}
-
-    static ofImage crop;
-    int id = (ofGetElapsedTimeMillis()/100) % 8;
-    crop.cropFrom(sprites, 128*id,0, 128,128);
-    crop.resize(32, 32);
-  	crop.draw(0, 0);
 }
 
 //--------------------------------------------------------------

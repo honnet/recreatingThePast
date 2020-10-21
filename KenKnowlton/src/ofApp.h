@@ -21,6 +21,9 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+        const int diameter = 12;
+        const static int sprite_num = 8;
+		ofImage sprite[sprite_num];
 		ofImage sprites;
 		ofImage photo;
 };

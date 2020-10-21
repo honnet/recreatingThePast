@@ -2,13 +2,14 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	photo.load("./photo.png"); // see in ./bin/data
-//    photo.cropFrom(sprites, h*5,0, h,h);
+	sprites.load("./sprites.png"); // see in ./bin/data
+
+	int h = sprites.getHeight();
+    photo.cropFrom(sprites, h*3,0, h,h);
     photo.resize(100, 100);
 
-	sprites.load("./sprites.png"); // see in ./bin/data
     sprites.resize(diameter*sprite_num, diameter);
-	int h = sprites.getHeight();
+	h = sprites.getHeight();
     for (int i = 0; i < sprite_num; i++) {
         sprite[i].cropFrom(sprites, h*i,0, h,h);
     }
@@ -19,7 +20,8 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     static ofImage crop;
-    int offset = ofMap(mouseX, 0, ofGetWidth(), 0, sprite_num);
+    int speed = ofMap(mouseX, 0, ofGetWidth(), 0, 10);
+    int offset = (speed * ofGetElapsedTimeMillis()/100 -1) % sprite_num;
 
 	int w = photo.getWidth();
 	int h = photo.getHeight();

@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
  	photo.load("./photo.jpg"); // see in ./bin/data
-    photo.resize(100, 100);
+    photo.resize(50, 50);
 
 	sprites.load("./sprites.png"); // see in ./bin/data
     sprites.resize(diameter*sprite_num, diameter);
@@ -15,10 +15,14 @@ void ofApp::setup(){
 	ofBackground(0);
 }
 
+
+#include <string>
+using namespace std;
+
 //--------------------------------------------------------------
 void ofApp::draw(){
     static ofImage crop;
-    int threshold = ofMap(mouseX, 0, ofGetWidth(), 3, sprite_num);
+    int threshold = ofMap(mouseX, 0, ofGetWidth(), 0, sprite_num);
     int offset = sprite_num - (ofGetElapsedTimeMillis()/100) % sprite_num;
 
 	int w = photo.getWidth();
@@ -35,6 +39,15 @@ void ofApp::draw(){
             sprite[id].draw(x*diameter, y*diameter);
 		}
 	}
+
+    static ofImage screenshot;
+    static int prev_offset = 0;
+    if (prev_offset != offset) {
+        prev_offset = offset;
+        screenshot.grabScreen(0, 0, 1000,1000);
+        screenshot.save("screenshot" + to_string(offset) + ".png");
+        cout << "screenshot" + to_string(offset) + ".png" << endl;
+    }
 }
 
 //--------------------------------------------------------------

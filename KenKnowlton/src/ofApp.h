@@ -20,10 +20,12 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+        void initPics();
 
-        const int diameter = 20;
+        int diameter = 10;
         const static int sprite_num = 8;
 		ofImage sprite[sprite_num];
 		ofImage sprites;
 		ofImage photo;
+        bool saveGif = false;
 };

@@ -1,9 +1,9 @@
 #include "ofApp.h"
 
-//--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::initPics(){
  	photo.load("./photo.jpg"); // see in ./bin/data
-    photo.resize(50, 50);
+    int size = 1000/diameter;
+    photo.resize(size, size);
 
 	sprites.load("./sprites.png"); // see in ./bin/data
     sprites.resize(diameter*sprite_num, diameter);
@@ -11,13 +11,15 @@ void ofApp::setup(){
     for (int i = 0; i < sprite_num; i++) {
         sprite[i].cropFrom(sprites, h*i,0, h,h);
     }
+}
+
+//--------------------------------------------------------------
+void ofApp::setup(){
+    initPics();
 
 	ofBackground(0);
 }
 
-
-#include <string>
-using namespace std;
 
 //--------------------------------------------------------------
 void ofApp::draw(){
@@ -40,14 +42,33 @@ void ofApp::draw(){
 		}
 	}
 
-    static ofImage screenshot;
-    static int prev_offset = 0;
-    if (prev_offset != offset) {
-        prev_offset = offset;
-        screenshot.grabScreen(0, 0, 1000,1000);
-        screenshot.save("screenshot" + to_string(offset) + ".png");
-        cout << "screenshot" + to_string(offset) + ".png" << endl;
+    if (saveGif) {
+        static ofImage screenshot;
+        static int prev_offset = 0;
+        if (prev_offset != offset) {
+            prev_offset = offset;
+            screenshot.grabScreen(0, 0, 1000,1000);
+            screenshot.save("screenshot" + to_string(offset) + ".png");
+            cout << "screenshot" + to_string(offset) + ".png" << endl;
+        }
     }
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y ){
+    static int y_old = y;
+
+    if (y_old != y){
+        y_old  = y;
+        diameter = ofMap(y, 0,ofGetWidth(), 10, 50);
+        initPics();
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
+    if (key == 's' || key == 'S')
+        saveGif = !saveGif; // Toggle save mode
 }
 
 //--------------------------------------------------------------
@@ -55,17 +76,7 @@ void ofApp::update(){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-
-}
-
-//--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
 
 }
 
